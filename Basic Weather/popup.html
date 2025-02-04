@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Basic Weather App</title>
+    <link rel="stylesheet"href="style.css">
 </head>
 <body>
-    <p>success</p>
+
+    <p class="location">
+        <span id="text_location"></span>
+        <sup id="text_location_country"></sup>
+    </p>
+
+    <div class="temp">
+        <span id="text_temp"></span>
+        <sup>°C</sup>
+    </div> 
+    <div class="temp_feel_like">
+        Feels like <span id="text_feelslike"></span>
+        <sup>°C</sup>
+    </div>
+
+    <img id="icon" alt="Weather Icon">
+
+    <p id="text_desc"></p>
+
 </body>
+
+<script src="fetchadta.js"></script>
 </html>
