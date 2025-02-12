@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Weather App</title>
-    <link rel="stylesheet"href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <h1>Weather App</h1>
+
+    <!-- Input for city name and button to fetch data -->
+    <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Enter city name">
+        <button id="getWeatherBtn">Get Weather</button>
+    </div>
+
+    <!-- Weather Information -->
     <p class="location">
         <span id="text_location"></span>
         <sup id="text_location_country"></sup>
@@ -22,6 +31,7 @@
         <sup>°C</sup>
     </div>
 
+    <!-- Weather Icon -->
     <img src="icon_16.png" id="icon" alt="Weather Icon" height="50px">
 
     <p id="text_desc"></p>

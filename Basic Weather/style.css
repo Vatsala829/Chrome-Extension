@@ -1,4 +1,7 @@
 body {
+    font-family: cursive, sans-serif;;
+    text-align: center;
+    padding: 20px;
     width: 400px;
     height: 400px;
     margin: 0;
@@ -7,13 +10,39 @@ body {
     justify-content: center;
     flex-direction: column;
     border-radius: 20px;
-    background: rgba(250, 250, 250, 0.85);
+    background: #74bdcb;
 }
 
 p {
     margin-top: 10px;
+    font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #efe7bc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #ffa384;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 sup {
@@ -23,6 +52,7 @@ sup {
 .location {
     display: flex;
     justify-content: center;
+    font-size: 24px;
     flex-direction: row;
     font-weight: bold;
 }
@@ -43,10 +73,10 @@ sup {
 .temp {
     display: flex;
     flex-direction: row;
-    font-size: 3rem;
+    font-size: 40px;
     font-weight: bold;
     margin-top: 10px;
-    color: #12417e;
+    color: #0056b3;
     text-align: center;
 }
 
@@ -54,7 +84,12 @@ sup {
     display: flex;
     flex-direction: row;
     font-size: 1.1rem;
+    font-size: 18px;
     margin-top: 10px;
     color: #1e2432;
     text-align: center;
 }
+#icon {
+    margin-top: 10px;
+}
+
