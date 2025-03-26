@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Interactive YouTube Learning Mode",
+  "version": "1.0",
+  "description": "Enhance YouTube learning with interactive features like quizzes and progress tracking.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"] 
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "play.png",
+      "48": "play.png",
+      "128": "play.png"
+    }
+  },
+  "icons": {
+    "16": "play.png",
+    "48": "play.png",
+    "128": "play.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["play.png", "content.css"],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
+}

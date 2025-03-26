@@ -1,81 +1,55 @@
 body {
-    width: 380px; /* Popup width */
-    height: 350px; /* Reduced Popup height */
+    height: 400px;
+    width: 320px;
     margin: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background 0.5s ease-in-out;
+    color: white; 
     text-align: center;
     font-family: Arial, sans-serif;
-    color: white;
-    overflow: hidden;
 }
 
-.container {
-    position: relative;
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better text readability */
-    padding: 15px;
-    border-radius: 10px;
-}
-
-/* Background Video */
-#background-video {
-    position: fixed;
+.overlay {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    background: rgba(0, 0, 0, 0.5);
     z-index: -1;
 }
 
-/* Centering the weather info */
-.weather-info {
+p {
+    margin: 0; /* Removes space between "Weather App" text and input */
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.search-box {
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    gap: 10px; /* Adds space between input and button */
     align-items: center;
-    justify-content: center; /* Center vertically */
-    height: 100%; /* Full height of container */
-}
-
-/* Temperature Display */
-.temp {
-    font-size: 40px; /* Slightly smaller to fit */
-    font-weight: bold;
-    color: #ffa384;
-    margin-top: 10px;
-}
-
-/* Feels like section */
-.temp_feel_like {
-    font-size: 16px;
-    color: #ffffff;
-    margin-top: 5px;
-}
-
-/* Location */
-.location {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-/* Search Box */
-.search-box {
-    margin-bottom: 10px;
 }
 
 input {
-    padding: 8px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 16px;
     border: 1px solid #efe7bc;
     border-radius: 5px;
 }
 
 button {
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 10px 15px;
+    font-size: 16px;
     background-color: #ffa384;
     color: white;
     border: none;
@@ -85,4 +59,29 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.temp {
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #ffd700;
+    text-align: center;
+}
+
+.temp_feel_like {
+    font-size: 18px;
+    margin-top: 10px;
+    color: white;
+    text-align: center;
+}
+
+#icon {
+    margin-top: 10px;
+}
+
+#loadingMessage {
+    font-size: 14px;
+    color: #ffa384;
+    text-align: center;
 }

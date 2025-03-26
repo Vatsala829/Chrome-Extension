@@ -3,40 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+    <title>Basic Weather App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Background Video -->
-    <video id="background-video" autoplay muted loop playsinline>
-        <source src="videos/default.mp4" type="video/mp4">
-    </video>
+    <div class="overlay"></div>
 
-    <div class="container">
-        <h1>Weather App</h1>
+    <h1>Weather App</h1>
 
-        <div class="search-box">
-            <input type="text" id="cityInput" placeholder="Enter city name">
-            <button id="getWeatherBtn">Get Weather</button>
-        </div>
-
-        <p class="location">
-            <span id="text_location"></span>
-            <sup id="text_location_country"></sup>
-        </p>
-
-        <div class="weather-info">
-            <div class="temp">
-                <span id="text_temp"></span>°C
-            </div>
-            <div class="temp_feel_like">
-                Feels like <span id="text_feelslike"></span>°C
-            </div>
-            <p id="text_desc"></p>
-            <img src="icon_16.png" id="icon" alt="Weather Icon" height="50px">
-        </div>
+    <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Enter city name">
+        <button id="getWeatherBtn">Get Weather</button>
     </div>
+
+    <p class="location">
+        <span id="text_location"></span>
+        <sup id="text_location_country"></sup>
+    </p>
+
+    <div class="temp">
+        <span id="text_temp"></span>
+        <sup>°C</sup>
+    </div> 
+    <div class="temp_feel_like">
+        Feels like <span id="text_feelslike"></span>
+        <sup>°C</sup>
+    </div>
+
+    <img src="icon_16.png" id="icon" alt="Weather Icon" height="50px">
+
+    <p id="text_desc"></p>
+    <p id="loadingMessage" style="display: none;">Detecting location...</p>
 
     <script src="fetchdata.js"></script>
 </body>
