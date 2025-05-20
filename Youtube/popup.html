@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive YouTube Learning</title>
-    <link rel="stylesheet" href="popup.css"> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive YouTube Learning</title>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-    <h2>Interactive Learning Mode</h2>
-    <button id="toggleMode">Enable Learning Mode</button>
+  <img src="play.png" alt="Logo" class="logo" />
+  <h2>Interactive Learning Mode</h2>
+  <button id="toggleMode" class="toggle-btn">Enable Learning Mode</button>
+  <button id="addNotesBtn" class="notes-btn">Add Notes</button>
 
-    <script src="popup.js"></script>
+  <div id="notesContainer">
+    <textarea id="notesTextarea" placeholder="Write your notes here..."></textarea>
+    <button id="saveNotesBtn" class="save-btn">Save Notes</button>
+    <button id="clearNotesBtn" class="clear-btn">Clear Notes</button>
+  </div>
+
+  <script src="popup.js"></script>
 </body>
 </html>
