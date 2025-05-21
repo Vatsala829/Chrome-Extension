@@ -1,6 +1,8 @@
 console.log("Interactive YouTube Learning Mode Loaded!");
 
 let quizVisible = false;
+let quizScore = 0;
+let totalQuizzes = 0;
 
 function extractKeywordsFromTitle(title) {
     let stopWords = ["the", "and", "for", "with", "you", "your", "what", "is", "how", "to"];
@@ -28,6 +30,7 @@ async function fetchQuizQuestion(videoTitle) {
                 question: data.results[0].question,
                 correctAnswer: data.results[0].correct_answer,
                 options: [...data.results[0].incorrect_answers, data.results[0].correct_answer]
+                    .sort(() => Math.random() - 0.5)
             };
         } else {
             console.error("No relevant questions found!");
@@ -40,30 +43,28 @@ async function fetchQuizQuestion(videoTitle) {
 }
 
 async function createQuizOverlay(videoTitle) {
-    if (quizVisible) {
-        console.log("Quiz already visible, skipping new quiz.");
-        return;
-    }
+    if (quizVisible) return;
     quizVisible = true;
 
     let quizOverlay = document.getElementById("quizOverlay");
 
     if (!quizOverlay) {
-        console.log("Creating quiz overlay...");
         quizOverlay = document.createElement("div");
         quizOverlay.id = "quizOverlay";
-        quizOverlay.style.position = "fixed";
-        quizOverlay.style.bottom = "20px";
-        quizOverlay.style.right = "20px";
-        quizOverlay.style.width = "320px";
-        quizOverlay.style.background = "rgba(0, 0, 0, 0.85)";
-        quizOverlay.style.color = "white";
-        quizOverlay.style.padding = "15px";
-        quizOverlay.style.borderRadius = "8px";
-        quizOverlay.style.zIndex = "9999";
-        quizOverlay.style.fontFamily = "Arial, sans-serif";
-        quizOverlay.style.display = "none";
-        quizOverlay.style.boxShadow = "0 0 10px #000";
+        Object.assign(quizOverlay.style, {
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            width: "320px",
+            background: "rgba(0, 0, 0, 0.85)",
+            color: "white",
+            padding: "15px",
+            borderRadius: "8px",
+            zIndex: "9999",
+            fontFamily: "Arial, sans-serif",
+            display: "none",
+            boxShadow: "0 0 10px #000"
+        });
         document.body.appendChild(quizOverlay);
     }
 
@@ -81,41 +82,40 @@ async function createQuizOverlay(videoTitle) {
     question.innerHTML = quizData.question;
     quizOverlay.appendChild(question);
 
-    let answerInput = document.createElement("input");
-    answerInput.type = "text";
-    answerInput.placeholder = "Type your answer here...";
-    answerInput.style.width = "100%";
-    answerInput.style.padding = "8px";
-    answerInput.style.borderRadius = "4px";
-    answerInput.style.border = "1px solid #ccc";
-    quizOverlay.appendChild(answerInput);
+    let optionsContainer = document.createElement("div");
+    quizData.options.forEach(option => {
+        let optionBtn = document.createElement("button");
+        optionBtn.innerText = option;
+        Object.assign(optionBtn.style, {
+            width: "100%",
+            marginBottom: "5px",
+            padding: "8px",
+            borderRadius: "4px",
+            border: "none",
+            backgroundColor: "#444",
+            color: "white",
+            cursor: "pointer"
+        });
 
-    let submitButton = document.createElement("button");
-    submitButton.innerText = "Submit";
-    submitButton.style.marginTop = "10px";
-    submitButton.style.width = "100%";
-    submitButton.style.padding = "10px";
-    submitButton.style.border = "none";
-    submitButton.style.borderRadius = "4px";
-    submitButton.style.backgroundColor = "#4CAF50";
-    submitButton.style.color = "white";
-    submitButton.style.fontWeight = "bold";
-    submitButton.style.cursor = "pointer";
+        optionBtn.addEventListener("click", () => {
+            totalQuizzes++;
+            if (option.toLowerCase() === quizData.correctAnswer.toLowerCase()) {
+                quizScore++;
+                alert("🎉 Correct Answer!");
+            } else {
+                alert(`❌ Incorrect! Correct Answer: ${quizData.correctAnswer}`);
+            }
 
-    submitButton.addEventListener("click", function () {
-        let userAnswer = answerInput.value.trim().toLowerCase();
-        let correctAnswer = quizData.correctAnswer.toLowerCase();
+            chrome.storage.local.set({ quizScore, totalQuizzes });
 
-        if (userAnswer === correctAnswer) {
-            alert("🎉 Correct Answer!");
-        } else {
-            alert(`❌ Incorrect! Correct Answer: ${quizData.correctAnswer}`);
-        }
-        quizOverlay.style.display = "none";
-        quizVisible = false;
+            quizOverlay.style.display = "none";
+            quizVisible = false;
+        });
+
+        optionsContainer.appendChild(optionBtn);
     });
 
-    quizOverlay.appendChild(submitButton);
+    quizOverlay.appendChild(optionsContainer);
     quizOverlay.style.display = "block";
 }
 
@@ -131,53 +131,49 @@ function trackVideoProgress() {
     let videoTitle = document.title;
 
     videoPlayer.addEventListener("timeupdate", async function () {
-    let currentTime = Math.floor(videoPlayer.currentTime);
+        let currentTime = Math.floor(videoPlayer.currentTime);
+        if (currentTime > 0 && currentTime - lastQuizTime >= 30) {
+            lastQuizTime = currentTime - (currentTime % 30);
+            setTimeout(async () => {
+                console.log("Showing quiz at:", currentTime, "seconds");
+                await createQuizOverlay(videoTitle);
+            }, 500);
+        }
+    });
+}
 
-    // Trigger quiz once for each 30-second interval passed
-    if (currentTime > 0 && currentTime - lastQuizTime >= 30) {
-        lastQuizTime = currentTime - (currentTime % 30);
-        setTimeout(async () => {
-            console.log("Showing quiz at:", currentTime, "seconds");
-            await createQuizOverlay(videoTitle);
-        }, 500);
+// INIT: Load status and check learning mode
+chrome.storage.local.get(["learningEnabled"], (result) => {
+    if (result.learningEnabled) {
+        quizScore = 0;
+        totalQuizzes = 0;
+        chrome.storage.local.set({ quizScore, totalQuizzes });
+
+        console.log("Learning Mode is enabled, starting video tracking...");
+        trackVideoProgress();
+    } else {
+        console.log("Learning Mode is disabled, quizzes will not show.");
+        const quizOverlay = document.getElementById("quizOverlay");
+        if (quizOverlay) quizOverlay.remove();
     }
 });
 
-}
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.learningEnabled) {
+        // Reset only if toggling from off to on
+        if (changes.learningEnabled.newValue === true && changes.learningEnabled.oldValue !== true) {
+            console.log("Learning Mode enabled via storage change, resetting score and starting tracking...");
 
-// 👇 Inject notes popup above quiz
-function createNotesPopup() {
-    let existingNotes = document.getElementById("notesContainer");
-    if (existingNotes) return;
+            quizScore = 0;
+            totalQuizzes = 0;
+            chrome.storage.local.set({ quizScore, totalQuizzes });
 
-    const notesContainer = document.createElement("div");
-    notesContainer.id = "notesContainer";
-    notesContainer.style.position = "fixed";
-    notesContainer.style.bottom = "230px"; // 👈 Adjusted position
-    notesContainer.style.right = "20px";
-    notesContainer.style.width = "300px";
-    notesContainer.style.background = "rgba(0, 0, 0, 0.85)";
-    notesContainer.style.color = "white";
-    notesContainer.style.padding = "15px";
-    notesContainer.style.borderRadius = "10px";
-    notesContainer.style.zIndex = "9999";
-    notesContainer.style.fontFamily = "Arial, sans-serif";
-    notesContainer.style.fontSize = "14px";
-    notesContainer.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.5)";
-    notesContainer.style.display = "block";
+            trackVideoProgress();
+        } else if (changes.learningEnabled.newValue === false) {
+            console.log("Learning Mode disabled via storage change, removing overlays...");
 
-    const textarea = document.createElement("textarea");
-    textarea.placeholder = "Write your notes here...";
-    textarea.style.width = "100%";
-    textarea.style.height = "100px";
-    textarea.style.resize = "vertical";
-    textarea.style.borderRadius = "5px";
-    textarea.style.padding = "10px";
-    textarea.style.border = "none";
-
-    notesContainer.appendChild(textarea);
-    document.body.appendChild(notesContainer);
-}
-
-trackVideoProgress(); // 👈 Starts tracking video for quiz
-console.log("Video tracking initialized...");
+            const quizOverlay = document.getElementById("quizOverlay");
+            if (quizOverlay) quizOverlay.remove();
+        }
+    }
+});
