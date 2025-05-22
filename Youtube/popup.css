@@ -39,26 +39,6 @@ button {
     transform: translateY(-2px);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.logo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto 10px;
-  display: block;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-
-  /* Animation */
-  animation: spin 5s linear infinite;
-}
-
-
-
 /* Add Notes Button */
 .notes-btn {
     background: linear-gradient(135deg, #43a047, #388e3c);
@@ -68,6 +48,55 @@ button {
 .notes-btn:hover {
     background: linear-gradient(135deg, #388e3c, #2e7d32);
     transform: translateY(-2px);
+}
+
+/* Screenshot Button */
+.screenshot-btn {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+}
+
+.screenshot-btn:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateY(-2px);
+}
+
+/* Search Button */
+#searchBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#searchBtn:hover {
+    background-color: #357ae8;
+    transform: translateY(-2px);
+}
+
+/* Search Input */
+#searchInput {
+    flex: 1;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 6px;
+    max-width: 160px;
+}
+
+/* Search container flex */
+#searchContainer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Notes Section */
@@ -87,68 +116,69 @@ button {
     font-family: inherit;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+/* Save button inside notes */
 .save-btn {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
-  color: white;
-  border: none;
-  padding: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .save-btn:hover {
-  background: linear-gradient(135deg, #f57c00, #ef6c00);
-  transform: translateY(-2px);
+    background: linear-gradient(135deg, #f57c00, #ef6c00);
+    transform: translateY(-2px);
 }
+
+/* Clear button inside notes */
 .clear-btn {
-  background: linear-gradient(135deg, #9e9e9e, #757575);
-  color: white;
-  border: none;
-  padding: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  margin-top: 8px;
+    background: linear-gradient(135deg, #9e9e9e, #757575);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 8px;
 }
 
 .clear-btn:hover {
-  background: linear-gradient(135deg, #757575, #616161);
-  transform: translateY(-2px);
+    background: linear-gradient(135deg, #757575, #616161);
+    transform: translateY(-2px);
 }
- #searchContainer {
-    margin-top: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
 
-  #searchInput {
-    flex: 1;
-    padding: 6px;
-    font-size: 13px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-right: 6px;
-    max-width: 160px;
-  }
+/* Logo Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
-  #searchBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-    border-radius: 5px;
-    background-color: #4285f4;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-  }
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 10px;
+    display: block;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    animation: spin 5s linear infinite;
+}
+
+#screenshotIcon {
+  width: 64px;
+  height: auto;
+  cursor: pointer;
+  margin-top: 10px;
+}
 

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleButton = document.getElementById("toggleMode");
   const addNotesBtn = document.getElementById("addNotesBtn");
   const searchBtn = document.getElementById("searchBtn");
+  const screenshotIcon = document.getElementById("screenshotIcon"); // Changed to screenshotIcon
 
   // Score display
   const scoreDisplay = document.createElement("div");
@@ -196,16 +197,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const query = input?.value.trim();
     if (query) {
       const encoded = encodeURIComponent(query);
+
+      // Open three relevant sites in new tabs
       const urls = [
-        `https://www.youtube.com/results?search_query=${encoded}`,
         `https://stackoverflow.com/search?q=${encoded}`,
+        `https://www.youtube.com/results?search_query=${encoded}`,
         `https://www.google.com/search?q=${encoded}`,
       ];
+
       for (const url of urls) {
         chrome.tabs.create({ url });
       }
     } else {
       alert("Please enter a topic to search.");
     }
+  });
+
+  // Screenshot functionality bound to camera image
+  screenshotIcon?.addEventListener("click", () => {
+    chrome.tabs.captureVisibleTab(null, { format: "png" }, (dataUrl) => {
+      if (chrome.runtime.lastError) {
+        alert("Screenshot capture failed: " + chrome.runtime.lastError.message);
+        return;
+      }
+      // Create temporary anchor element to trigger download
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "youtube_learning_screenshot.png";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   });
 });

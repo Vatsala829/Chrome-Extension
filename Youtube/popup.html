@@ -12,6 +12,10 @@
   
   <button id="toggleMode" class="toggle-btn">Enable Learning Mode</button>
   <button id="addNotesBtn" class="notes-btn">Add Notes</button>
+  <img id="screenshotIcon" src="camera.png" alt="Take Screenshot" title="Take Screenshot" />
+
+  <!-- Score display section -->
+  <div id="scoreDisplay">Score: 0 / 0</div>
 
   <!-- Notes Section (displayed in popup, not overlay) -->
   <div id="notesContainer">
@@ -21,15 +25,11 @@
     <button id="downloadNotesBtn" class="download-btn">Download Notes</button>
   </div>
 
-  <!-- Score display section -->
-  <div id="scoreDisplay">Score: 0 / 0</div>
-
   <!-- Search section -->
-<div id="searchContainer">
-  <input type="text" id="searchInput" placeholder="Search a topic..." />
-  <button id="searchBtn">🔍 Search</button>
-</div>
-
+  <div id="searchContainer">
+    <input type="text" id="searchInput" placeholder="Search a topic..." />
+    <button id="searchBtn">🔍 Search</button>
+  </div>
 
   <script src="popup.js"></script>
 </body>
