@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   const toggleButton = document.getElementById("toggleMode");
   const addNotesBtn = document.getElementById("addNotesBtn");
+  const searchBtn = document.getElementById("searchBtn");
 
+  // Score display
   const scoreDisplay = document.createElement("div");
   scoreDisplay.id = "scoreDisplay";
   scoreDisplay.style.marginTop = "15px";
   scoreDisplay.style.fontWeight = "bold";
   scoreDisplay.style.fontSize = "16px";
   scoreDisplay.textContent = "Score: 0 / 0";
-  // Insert scoreDisplay after addNotesBtn
   addNotesBtn.insertAdjacentElement("afterend", scoreDisplay);
 
-  // Initialize button text based on stored state
   chrome.storage.local.get(["learningEnabled", "quizScore", "totalQuizzes"], (data) => {
     const enabled = data.learningEnabled || false;
     toggleButton.textContent = enabled ? "Disable Learning Mode" : "Enable Learning Mode";
@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     scoreDisplay.textContent = `Score: ${score} / ${total}`;
   });
 
-  // Listen for storage changes to update score dynamically
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === "local") {
       if ("quizScore" in changes || "totalQuizzes" in changes) {
@@ -38,19 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.get("learningEnabled", (data) => {
       const newState = !data.learningEnabled;
 
-      // Save new state
       chrome.storage.local.set({ learningEnabled: newState }, () => {
         toggleButton.textContent = newState ? "Disable Learning Mode" : "Enable Learning Mode";
 
-        // Inject or remove overlays accordingly
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           if (newState) {
-            // Inject learning mode overlay & start tracking quiz etc.
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id },
               func: () => {
                 alert("Interactive Learning Mode Enabled!");
-
                 if (!document.getElementById("learningOverlay")) {
                   let overlay = document.createElement("div");
                   overlay.id = "learningOverlay";
@@ -65,28 +60,19 @@ document.addEventListener("DOMContentLoaded", () => {
                   overlay.style.zIndex = "9999";
                   document.body.appendChild(overlay);
                 }
-
-                // Start video quiz tracking here, or rely on content.js checking storage
               }
             });
           } else {
-            // Remove learning overlay and any quiz overlays
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id },
               func: () => {
                 alert("Interactive Learning Mode Disabled!");
                 const overlay = document.getElementById("learningOverlay");
                 if (overlay) overlay.remove();
-
-                // Remove quiz overlay if any
                 const quizOverlay = document.getElementById("quizOverlay");
                 if (quizOverlay) quizOverlay.remove();
-
-                // Remove notes container if any
                 const notesContainer = document.getElementById("notesContainerOverlay");
                 if (notesContainer) notesContainer.remove();
-
-                // Also optionally stop any ongoing intervals/listeners you have in content.js
               }
             });
           }
@@ -100,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         func: () => {
-          // Toggle notes container
           const existing = document.getElementById("notesContainerOverlay");
           if (existing) {
             existing.style.display = existing.style.display === "none" ? "block" : "none";
@@ -131,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
           textarea.style.resize = "vertical";
           textarea.style.border = "1px solid #ccc";
 
-          // Load saved notes
           const savedNotes = localStorage.getItem("yt_learning_notes");
           if (savedNotes) {
             textarea.value = savedNotes;
@@ -172,12 +156,56 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           };
 
+          const downloadBtn = document.createElement("button");
+          downloadBtn.textContent = "⬇️ Download Notes";
+          downloadBtn.style.marginTop = "8px";
+          downloadBtn.style.width = "100%";
+          downloadBtn.style.padding = "10px";
+          downloadBtn.style.background = "#2196f3";
+          downloadBtn.style.color = "white";
+          downloadBtn.style.border = "none";
+          downloadBtn.style.borderRadius = "5px";
+          downloadBtn.style.cursor = "pointer";
+          downloadBtn.style.fontWeight = "bold";
+          downloadBtn.onclick = () => {
+            const notes = localStorage.getItem("yt_learning_notes") || "";
+            const blob = new Blob([notes], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "YouTube_Learning_Notes.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          };
+
           container.appendChild(textarea);
           container.appendChild(saveBtn);
           container.appendChild(clearBtn);
+          container.appendChild(downloadBtn);
           document.body.appendChild(container);
         }
       });
     });
+  });
+
+  // Search functionality
+  searchBtn?.addEventListener("click", () => {
+    const input = document.getElementById("searchInput");
+    const query = input?.value.trim();
+    if (query) {
+      const encoded = encodeURIComponent(query);
+      const urls = [
+        `https://www.youtube.com/results?search_query=${encoded}`,
+        `https://stackoverflow.com/search?q=${encoded}`,
+        `https://www.google.com/search?q=${encoded}`,
+      ];
+      for (const url of urls) {
+        chrome.tabs.create({ url });
+      }
+    } else {
+      alert("Please enter a topic to search.");
+    }
   });
 });

@@ -124,4 +124,31 @@ button {
   background: linear-gradient(135deg, #757575, #616161);
   transform: translateY(-2px);
 }
+ #searchContainer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #searchInput {
+    flex: 1;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 6px;
+    max-width: 160px;
+  }
+
+  #searchBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
 

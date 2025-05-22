@@ -13,14 +13,23 @@
   <button id="toggleMode" class="toggle-btn">Enable Learning Mode</button>
   <button id="addNotesBtn" class="notes-btn">Add Notes</button>
 
+  <!-- Notes Section (displayed in popup, not overlay) -->
   <div id="notesContainer">
     <textarea id="notesTextarea" placeholder="Write your notes here..."></textarea>
     <button id="saveNotesBtn" class="save-btn">Save Notes</button>
     <button id="clearNotesBtn" class="clear-btn">Clear Notes</button>
+    <button id="downloadNotesBtn" class="download-btn">Download Notes</button>
   </div>
 
   <!-- Score display section -->
   <div id="scoreDisplay">Score: 0 / 0</div>
+
+  <!-- Search section -->
+<div id="searchContainer">
+  <input type="text" id="searchInput" placeholder="Search a topic..." />
+  <button id="searchBtn">🔍 Search</button>
+</div>
+
 
   <script src="popup.js"></script>
 </body>
